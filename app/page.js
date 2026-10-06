@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 const PLATFORMS = [
   { value: "flipkart", label: "Flipkart" },
   { value: "tatacliq", label: "Tata Cliq" },
+  { value: "snapdeal", label: "Snapdeal" },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
