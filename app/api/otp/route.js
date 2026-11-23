@@ -22,7 +22,7 @@ export async function POST(req) {
 
   if (!isSupportedPlatform(platform)) {
     return NextResponse.json(
-      { success: false, message: "Unsupported platform. Use flipkart, tatacliq or snapdeal." },
+      { success: false, message: "Unsupported platform. Use flipkart, tatacliq, snapdeal or ajio." },
       { status: 400 }
     );
   }

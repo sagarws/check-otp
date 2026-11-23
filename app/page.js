@@ -6,6 +6,7 @@ const PLATFORMS = [
   { value: "flipkart", label: "Flipkart" },
   { value: "tatacliq", label: "Tata Cliq" },
   { value: "snapdeal", label: "Snapdeal" },
+  { value: "ajio", label: "AJIO" },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
