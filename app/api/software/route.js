@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import { addSoftware, listSoftware } from "@/lib/software-store";
-import { validateSoftware } from "@/lib/software-validate";
+import { storageError, validateSoftware } from "@/lib/software-validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 // GET /api/software -> the whole list
 export async function GET() {
-  return NextResponse.json(await listSoftware());
+  try {
+    return NextResponse.json(await listSoftware());
+  } catch (err) {
+    return storageError(err);
+  }
 }
 
 // POST /api/software { softwareName, version, link } -> add new software
@@ -22,7 +26,12 @@ export async function POST(request) {
   const { data, error } = validateSoftware(body);
   if (error) return NextResponse.json({ error }, { status: 400 });
 
-  const result = await addSoftware(data);
+  let result;
+  try {
+    result = await addSoftware(data);
+  } catch (err) {
+    return storageError(err);
+  }
   if (result.error === "exists") {
     return NextResponse.json(
       { error: `Software "${data.softwareName}" already exists. Edit it instead.` },

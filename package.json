@@ -8,6 +8,7 @@
     "start": "next start -p 3010"
   },
   "dependencies": {
+    "@upstash/redis": "^1.41.1",
     "imap": "^0.8.19",
     "mailparser": "^3.9.14",
     "next": "^14.2.15",

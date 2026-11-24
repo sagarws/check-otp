@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { deleteSoftware, getSoftware, updateSoftware } from "@/lib/software-store";
-import { validateSoftware } from "@/lib/software-validate";
+import { storageError, validateSoftware } from "@/lib/software-validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,7 +11,12 @@ const notFound = (name) =>
 // GET /api/software/Featured%20App -> one object (apps call this to check their version)
 export async function GET(_request, { params }) {
   const name = decodeURIComponent(params.name);
-  const item = await getSoftware(name);
+  let item;
+  try {
+    item = await getSoftware(name);
+  } catch (err) {
+    return storageError(err);
+  }
   return item ? NextResponse.json(item) : notFound(name);
 }
 
@@ -29,7 +34,12 @@ export async function PUT(request, { params }) {
   const { data, error } = validateSoftware(body, { partial: true });
   if (error) return NextResponse.json({ error }, { status: 400 });
 
-  const result = await updateSoftware(name, data);
+  let result;
+  try {
+    result = await updateSoftware(name, data);
+  } catch (err) {
+    return storageError(err);
+  }
   if (result.error === "not_found") return notFound(name);
   if (result.error === "exists") {
     return NextResponse.json(
@@ -43,6 +53,11 @@ export async function PUT(request, { params }) {
 // DELETE /api/software/Featured%20App
 export async function DELETE(_request, { params }) {
   const name = decodeURIComponent(params.name);
-  const result = await deleteSoftware(name);
+  let result;
+  try {
+    result = await deleteSoftware(name);
+  } catch (err) {
+    return storageError(err);
+  }
   return result.error ? notFound(name) : NextResponse.json({ ok: true, deleted: result.item });
 }
