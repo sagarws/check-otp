@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 const PLATFORMS = [
   { value: "flipkart", label: "Flipkart" },
@@ -18,6 +19,11 @@ export default function Page() {
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [devMode, setDevMode] = useState(false);
+
+  useEffect(() => {
+    setDevMode(localStorage.getItem("devmode") === "true");
+  }, []);
 
   const platformLabel = useMemo(
     () => PLATFORMS.find((p) => p.value === platform)?.label || platform,
@@ -158,6 +164,12 @@ export default function Page() {
               {copied ? "Copied!" : "Copy OTP"}
             </button>
           </div>
+        )}
+
+        {devMode && (
+          <Link href="/software" className="home-link">
+            Manage software versions →
+          </Link>
         )}
       </section>
     </main>
